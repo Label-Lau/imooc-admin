@@ -3,6 +3,7 @@ import md5 from 'md5'
 import router from '@/router'
 import { setItem, getItem, removeAllItem } from '@/utils/storage'
 import { TOKEN } from '@/constant'
+import { setTimeStamp } from '@/utils/auth'
 export default {
   namespaced: true,
   state: () => ({
@@ -32,6 +33,8 @@ export default {
              *  */
             (data) => {
               commit('setToken', data.token)
+              // 保存登录时间
+              setTimeStamp()
               resolve()
             }
           )
