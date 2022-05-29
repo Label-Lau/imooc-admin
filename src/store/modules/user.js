@@ -1,20 +1,24 @@
-import { login } from '@/api/sys'
+import { login, getUserInfo } from '@/api/sys'
 import md5 from 'md5'
 import { setItem, getItem } from '@/utils/storage'
 import { TOKEN } from '@/constant'
 export default {
   namespaced: true,
   state: () => ({
-    token: getItem(TOKEN) || ''
+    token: getItem(TOKEN) || '',
+    userInfo: {}
   }),
   mutations: {
     setToken(state, token) {
       state.token = token
       setItem(TOKEN, token)
+    },
+    setUserInfo(state, userInfo) {
+      state.userInfo = userInfo
     }
   },
   actions: {
-    login(context, userInfo) {
+    login({ commit }, userInfo) {
       const { username, password } = userInfo
       return new Promise((resolve, reject) => {
         login({
@@ -26,7 +30,7 @@ export default {
              * @param {string} data.token
              *  */
             (data) => {
-              this.commit('user/setToken', data.token)
+              commit('setToken', data.token)
               resolve()
             }
           )
@@ -34,6 +38,14 @@ export default {
             reject(err)
           })
       })
+    },
+    async getUserInfo({ commit }) {
+      const res = await getUserInfo()
+      /**
+       * @param {string} res.avatar - 用户头像
+       * */
+      commit('setUserInfo', res)
+      return res
     }
   }
 }
