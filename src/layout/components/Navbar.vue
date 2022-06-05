@@ -30,7 +30,6 @@
 </template>
 
 <script setup>
-import {} from 'vue'
 import { useStore } from 'vuex'
 const store = useStore()
 const logout = () => {
@@ -52,7 +51,7 @@ const logout = () => {
     float: right;
     padding-right: 16px;
 
-    ::v-deep .avatar-container {
+    :deep(.avatar-container) {
       cursor: pointer;
       .avatar-wrapper {
         margin-top: 5px;
