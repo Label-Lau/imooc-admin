@@ -1,4 +1,5 @@
 const { defineConfig } = require('@vue/cli-service')
+const NodePolyfillPlugin = require('node-polyfill-webpack-plugin')
 module.exports = defineConfig({
   transpileDependencies: true
 })
@@ -34,5 +35,9 @@ module.exports = {
         symbolId: 'icon-[name]'
       })
       .end()
+  },
+  configureWebpack: {
+    // 解决 webpack5 的 path 报错
+    plugins: [new NodePolyfillPlugin()]
   }
 }
