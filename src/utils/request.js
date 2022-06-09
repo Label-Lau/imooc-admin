@@ -2,6 +2,7 @@ import axios from 'axios'
 import store from '@/store'
 import { ElMessage } from 'element-plus'
 import { isCheckTimeout } from '@/utils/auth'
+import { ICODE } from '@/constant'
 
 const service = axios.create({
   baseURL: process.env.VUE_APP_BASE_API,
@@ -12,7 +13,7 @@ const service = axios.create({
 service.interceptors.request.use(
   (config) => {
     // 添加 icode
-    config.headers.icode = '978A71C9120A6022'
+    config.headers.icode = ICODE
     // 在这个位置需要统一的去注入token
     if (store.getters.token) {
       if (isCheckTimeout()) {

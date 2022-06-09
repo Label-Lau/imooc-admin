@@ -1,5 +1,10 @@
 <template>
-  <div class="app-wrapper">
+  <div
+    :class="[
+      'app-wrapper',
+      store.getters.sidebarOpened ? 'openSidebar' : 'hideSidebar'
+    ]"
+  >
     <!-- 左侧 menu -->
     <sidebar
       id="guide-sidebar"
@@ -22,7 +27,8 @@ import Navbar from './components/Navbar'
 import Sidebar from './components/Sidebar'
 import AppMain from './components/AppMain'
 import variables from '@/styles/variables.module.scss'
-import {} from 'vue'
+import { useStore } from 'vuex'
+const store = useStore()
 </script>
 
 <style lang="scss" scoped>
@@ -42,5 +48,9 @@ import {} from 'vue'
   right: 0;
   z-index: 9;
   width: calc(100% - #{$sideBarWidth});
+}
+
+.hideSidebar .fixed-header {
+  width: calc(100% - #{$hideSideBarWidth});
 }
 </style>

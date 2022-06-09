@@ -1,3 +1,4 @@
+export const ICODE = '978A71C9120A6022'
 export const TOKEN = 'token'
 // token 时间戳
 export const TIME_STAMP = 'timeStamp'
