@@ -55,11 +55,12 @@
 
 <script setup>
 // 导入组件之后无需注册可直接使用
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { validatePassword } from './rules'
 import { useStore } from 'vuex'
 import router from '@/router'
 import { useI18n } from 'vue-i18n'
+import { watchSwitchLang } from '@/utils/i18n'
 import LangSelect from '@/components/LangSelect'
 
 // 数据源
@@ -74,7 +75,7 @@ const loginRules = ref({
     {
       required: true,
       trigger: 'blur',
-      message: i18n.t('msg.login.usernameRule')
+      message: computed(() => i18n.t('msg.login.usernameRule'))
     }
   ],
   password: [
@@ -84,6 +85,9 @@ const loginRules = ref({
       validator: validatePassword()
     }
   ]
+})
+watchSwitchLang(() => {
+  loginFromRef.value.validate()
 })
 // 处理密码框文本显示状态
 const passwordType = ref('password')
