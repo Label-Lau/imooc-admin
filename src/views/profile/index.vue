@@ -8,7 +8,7 @@
         <el-card>
           <el-tabs v-model="activeName">
             <el-tab-pane :label="$t('msg.profile.feature')" name="feature">
-              <feature :features="featureData" />
+              <Feature :features="featureData" />
             </el-tab-pane>
             <el-tab-pane :label="$t('msg.profile.chapter')" name="chapter">
               <chapter />
@@ -26,7 +26,6 @@
 <script setup>
 import ProjectCard from './components/ProjectCard.vue'
 import Chapter from './components/Chapter.vue'
-// eslint-disable-next-line
 import Feature from './components/Feature.vue'
 import Author from './components/Author.vue'
 import { ref } from 'vue'

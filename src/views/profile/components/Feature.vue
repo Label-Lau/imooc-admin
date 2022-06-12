@@ -12,7 +12,7 @@
 </template>
 
 <script setup>
-import { ref, defineProps } from 'vue'
+import { ref } from 'vue'
 const activeName = ref(0)
 defineProps({
   features: {

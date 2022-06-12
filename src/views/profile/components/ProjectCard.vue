@@ -10,22 +10,22 @@
       <!-- 头像 -->
       <div class="box-center">
         <pan-thumb
-          :image="$store.getters.userInfo.avatar"
+          :image="store.getters.userInfo.avatar"
           :height="'100px'"
           :width="'100px'"
           :hoverable="false"
         >
           <div>Hello</div>
-          {{ $store.getters.userInfo.title }}
+          {{ store.getters.userInfo.title }}
         </pan-thumb>
       </div>
       <!-- 姓名 && 角色 -->
       <div class="box-center">
         <div class="user-name text-center">
-          {{ $store.getters.userInfo.username }}
+          {{ store.getters.userInfo.username }}
         </div>
         <div class="user-role text-center text-muted">
-          {{ $store.getters.userInfo.title }}
+          {{ store.getters.userInfo.title }}
         </div>
       </div>
     </div>
@@ -63,7 +63,9 @@
 
 <script setup>
 import PanThumb from '@/components/PanThumb/index.vue'
-import { defineProps } from 'vue'
+import { useStore } from 'vuex'
+const store = useStore()
+
 defineProps({
   features: {
     type: Array,
