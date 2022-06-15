@@ -2,7 +2,9 @@
   <div class="user-manage-container">
     <el-card class="header">
       <div>
-        <el-button type="primary" @click="onImportExcelClick"> {{ $t('msg.excel.importExcel') }}</el-button>
+        <el-button type="primary" @click="onImportExcelClick">
+          {{ $t('msg.excel.importExcel') }}
+        </el-button>
         <el-button type="success">
           {{ $t('msg.excel.exportExcel') }}
         </el-button>
@@ -27,9 +29,9 @@
         <el-table-column :label="$t('msg.excel.role')">
           <template #default="{ row }">
             <div v-if="row.role && row.role.length > 0">
-              <el-tag v-for="item in row.role" :key="item.id" size="mini">{{
-                item.title
-              }}</el-tag>
+              <el-tag v-for="item in row.role" :key="item.id" size="mini">
+                {{ item.title }}
+              </el-tag>
             </div>
             <div v-else>
               <el-tag size="mini">{{ $t('msg.excel.defaultRole') }}</el-tag>
@@ -46,16 +48,16 @@
           fixed="right"
           width="260"
         >
-          <template #default>
-            <el-button type="primary" size="mini">{{
-              $t('msg.excel.show')
-            }}</el-button>
-            <el-button type="info" size="mini">{{
-              $t('msg.excel.showRole')
-            }}</el-button>
-            <el-button type="danger" size="mini">{{
-              $t('msg.excel.remove')
-            }}</el-button>
+          <template #default="{ row }">
+            <el-button type="primary" size="mini">
+              {{ $t('msg.excel.show') }}
+            </el-button>
+            <el-button type="info" size="mini">
+              {{ $t('msg.excel.showRole') }}
+            </el-button>
+            <el-button type="danger" size="mini" @click="onRemoveClick(row)">
+              {{ $t('msg.excel.remove') }}
+            </el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -75,10 +77,12 @@
   </div>
 </template>
 <script setup>
-import { ref } from 'vue'
-import { getUserManageList } from '@/api/user-manage'
+import { onActivated, ref } from 'vue'
+import { deleteUser, getUserManageList } from '@/api/user-manage'
 import { watchSwitchLang } from '@/utils/i18n'
 import { useRouter } from 'vue-router'
+import { ElMessage, ElMessageBox } from 'element-plus'
+import { useI18n } from 'vue-i18n'
 
 // 数据相关
 const tableData = ref([])
@@ -97,6 +101,8 @@ const getListData = async () => {
 getListData()
 // 监听语言切换
 watchSwitchLang(getListData)
+// 处理导入用户后数据不重新加载的问题
+onActivated(getListData)
 
 // 分页相关
 /**
@@ -121,6 +127,26 @@ const router = useRouter()
  */
 const onImportExcelClick = () => {
   router.push('/user/import')
+}
+
+/**
+ * 删除按钮点击事件
+ */
+const i18n = useI18n()
+const onRemoveClick = row => {
+  ElMessageBox.confirm(
+    i18n.t('msg.excel.dialogTitle1') +
+    row.username +
+    i18n.t('msg.excel.dialogTitle2'),
+    {
+      type: 'warning'
+    }
+  ).then(async () => {
+    await deleteUser(row._id)
+    ElMessage.success(i18n.t('msg.excel.removeSuccess'))
+    // 重新渲染数据
+    await getListData()
+  })
 }
 </script>
 
