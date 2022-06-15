@@ -1,9 +1,14 @@
 <template>
-  <div class="">导入</div>
+  <upload-excel :onSuccess="onSuccess"></upload-excel>
 </template>
 
 <script setup>
-import {} from 'vue'
-</script>
+import UploadExcel from '@/components/UploadExcel'
 
-<style lang="scss" scoped></style>
+/**
+ * 数据解析成功之后的回调
+ */
+const onSuccess = (excelData) => {
+  console.log(excelData)
+}
+</script>
