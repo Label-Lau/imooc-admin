@@ -5,7 +5,7 @@
         <el-button type="primary" @click="onImportExcelClick">
           {{ $t('msg.excel.importExcel') }}
         </el-button>
-        <el-button type="success">
+        <el-button type="success" @click="onToExcelClick">
           {{ $t('msg.excel.exportExcel') }}
         </el-button>
       </div>
@@ -74,6 +74,7 @@
       >
       </el-pagination>
     </el-card>
+    <export-to-excel v-model="exportToExcelVisible"></export-to-excel>
   </div>
 </template>
 <script setup>
@@ -83,6 +84,7 @@ import { watchSwitchLang } from '@/utils/i18n'
 import { useRouter } from 'vue-router'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { useI18n } from 'vue-i18n'
+import ExportToExcel from './components/Export2Excel.vue'
 
 // 数据相关
 const tableData = ref([])
@@ -133,11 +135,11 @@ const onImportExcelClick = () => {
  * 删除按钮点击事件
  */
 const i18n = useI18n()
-const onRemoveClick = row => {
+const onRemoveClick = (row) => {
   ElMessageBox.confirm(
     i18n.t('msg.excel.dialogTitle1') +
-    row.username +
-    i18n.t('msg.excel.dialogTitle2'),
+      row.username +
+      i18n.t('msg.excel.dialogTitle2'),
     {
       type: 'warning'
     }
@@ -147,6 +149,14 @@ const onRemoveClick = row => {
     // 重新渲染数据
     await getListData()
   })
+}
+
+/**
+ * excel 导出点击事件
+ */
+const exportToExcelVisible = ref(false)
+const onToExcelClick = () => {
+  exportToExcelVisible.value = true
 }
 </script>
 
