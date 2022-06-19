@@ -2,7 +2,11 @@
   <div class="user-manage-container">
     <el-card class="header">
       <div>
-        <el-button type="primary" @click="onImportExcelClick">
+        <el-button
+          v-permission="['importUser']"
+          type="primary"
+          @click="onImportExcelClick"
+        >
           {{ $t('msg.excel.importExcel') }}
         </el-button>
         <el-button type="success" @click="onToExcelClick">
@@ -52,10 +56,20 @@
             <el-button type="primary" size="mini" @click="onShowClick(row._id)">
               {{ $t('msg.excel.show') }}
             </el-button>
-            <el-button type="info" size="mini">
+            <el-button
+              v-permission="['distributeRole']"
+              type="info"
+              size="mini"
+              @click="onShowRoleClick(row)"
+            >
               {{ $t('msg.excel.showRole') }}
             </el-button>
-            <el-button type="danger" size="mini" @click="onRemoveClick(row)">
+            <el-button
+              v-permission="['removeUser']"
+              type="danger"
+              size="mini"
+              @click="onRemoveClick(row)"
+            >
               {{ $t('msg.excel.remove') }}
             </el-button>
           </template>
@@ -75,16 +89,22 @@
       </el-pagination>
     </el-card>
     <export-to-excel v-model="exportToExcelVisible"></export-to-excel>
+    <roles-dialog
+      v-model="roleDialogVisible"
+      :userId="selectUserId"
+      @updateRole="getListData"
+    ></roles-dialog>
   </div>
 </template>
 <script setup>
-import { onActivated, ref } from 'vue'
+import { onActivated, ref, watch } from 'vue'
 import { deleteUser, getUserManageList } from '@/api/user-manage'
 import { watchSwitchLang } from '@/utils/i18n'
 import { useRouter } from 'vue-router'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { useI18n } from 'vue-i18n'
 import ExportToExcel from './components/Export2Excel.vue'
+import RolesDialog from './components/roles.vue'
 
 // 数据相关
 const tableData = ref([])
@@ -165,6 +185,20 @@ const onToExcelClick = () => {
 const onShowClick = (id) => {
   router.push(`/user/info/${id}`)
 }
+
+/**
+ * 查看角色的点击事件
+ */
+const roleDialogVisible = ref(false)
+const selectUserId = ref('')
+const onShowRoleClick = (row) => {
+  roleDialogVisible.value = true
+  selectUserId.value = row._id
+}
+// 保证每次打开重新获取用户角色数据
+watch(roleDialogVisible, (val) => {
+  if (!val) selectUserId.value = ''
+})
 </script>
 
 <style lang="scss" scoped>
